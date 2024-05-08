@@ -30,7 +30,7 @@ while True:
             for i, line in enumerate(decoded):
                 print("Writing to display: \"%s\"" % line)
                 color = Adafruit_EPD.BLACK if i % 2 == 0 else Adafruit_EPD.RED
-                il0373.text(line, 10, padding, Adafruit_EPD.RED, size=2)
+                il0373.text(line, 10, padding, color, size=2)
                 
                 # Increase padding for every other line
                 if i % 2 == 0:
