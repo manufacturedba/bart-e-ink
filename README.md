@@ -19,15 +19,15 @@ This project is a simple display of the next southbound North Berkeley BART depa
 
 ### Display
 
-Populate the eInk device with the contents of `display/` directory including the `lib/` directory using the Adafruit CircuitPython library bundle.
+Populate the eInk device with the contents of `display/` directory including its `lib/` directory using the Adafruit CircuitPython library bundle.
+
+Dependencies are listed in `display/requirements.txt`.
 
 You can find the bundle at https://circuitpython.org/libraries
 
 ## Disclaimer
 
-This project currently requires manual fetching of GTFS data and assumes it is 
-stored under `gtfs/` in the project directory. This is not included with the 
-repository.
+This project currently requires manual fetching of GTFS data and assumes it is stored under `gtfs/` in the project directory. This is not included with the repository.
 
 You can find a permalink to the GTFS data for BART at https://www.bart.gov/schedules/developers/gtfs
 
