@@ -1,0 +1,14 @@
+For a desired route, find its route id by hand
+For a desired stop, find its stop id by hand
+
+For the above given route ids, find all associated trip ids
+For trip ids found, get their associated stop times
+For stop times found, filter by stop ids found
+
+For each route, find the stop time that is closest to the current time
+Format time difference in minutes
+
+Example:
+
+MILLBRAE     1,10 MIN
+6-CAR, 2-DOOR
