@@ -1,0 +1,14 @@
+Adafruit-Blinka==8.39.1
+adafruit-circuitpython-busdevice==5.2.9
+adafruit-circuitpython-connectionmanager==2.0.0
+adafruit-circuitpython-epd==2.12.2
+adafruit-circuitpython-esp32spi==8.1.1
+adafruit-circuitpython-framebuf==1.6.5
+adafruit-circuitpython-requests==3.2.8
+adafruit-circuitpython-typing==1.10.3
+Adafruit-PlatformDetect==3.62.0
+Adafruit-PureIO==1.1.11
+pyftdi==0.55.4
+pyserial==3.5
+pyusb==1.2.1
+typing_extensions==4.11.0
