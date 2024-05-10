@@ -35,8 +35,9 @@ type StopTime struct {
 }
 
 type Route struct {
-	route_id int
+	route_id string
 	sign_code string
+	paired_service_id string
 }
 
 const timeLayout = "15:04:05"
@@ -114,11 +115,11 @@ func getStopTimeRecords() []StopTime {
 	return stopTimes
 }
 
-func getTripsByRoute(route_id string, trips []Trip) []Trip {
+func getTripsByRoute(route Route, trips []Trip) []Trip {
 	var tripsByRoute []Trip
 	
 	for _, trip := range trips {
-		if trip.route_id == route_id {
+		if trip.route_id == route.route_id && trip.service_id == route.paired_service_id{
 			tripsByRoute = append(tripsByRoute, trip)
 		}
 	}
@@ -243,8 +244,8 @@ func formatTimes(stopTimes []StopTime) string {
 
 func Rows() []string {
 	desiredStopTimeCount := 2
-	orangeSouth := Route{route_id: 4, sign_code: "BERRYESSA"} // Richmond to Berryessa/North San Jose
-	redSouth := Route{route_id: 7, sign_code: "MILLBRAE"} // Richmond to Daly City/Millbrae
+	orangeSouth := Route{route_id: "4", sign_code: "BERRYESSA", paired_service_id: "2024_01_15-DX-MVS-Weekday-01"} // Richmond to Berryessa/North San Jose
+	redSouth := Route{route_id: "7", sign_code: "MILLBRAE", paired_service_id: "2024_01_15-DX-MVS-Weekday-01"} // Richmond to Daly City/Millbrae
 	northBerkeleyStopId := "NBRK" // North Berkeley
 
 	routes := [2]Route{orangeSouth, redSouth}
@@ -255,7 +256,7 @@ func Rows() []string {
 	stopTimeRecords := getStopTimeRecords()
 	
 	for _, route := range routes {
-		trips := getTripsByRoute(fmt.Sprintf("%d", route.route_id), tripRecords)
+		trips := getTripsByRoute(route, tripRecords)
 		tripStopTimes := getStopTimesByTrips(trips, stopTimeRecords)
 		
 		for _, stop := range stops {
