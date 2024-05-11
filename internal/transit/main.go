@@ -271,7 +271,7 @@ func Rows() []string {
 			formattedTime := formatTimes(maybeUpcomingStopTimes)
 			
 			rows = append(rows, fmt.Sprintf("%s  %s", route.sign_code, formattedTime))
-			rows = append(rows, "10-CAR, 2-DOOR")
+			rows = append(rows, "6-CAR, 2-DOOR")
 		}
 	}
 	
