@@ -9,6 +9,11 @@ import (
 	"time"
 )
 
+/*
+ * Trip struct represents a trip record
+ * A trip is a sequence of two or more stops along a route that occur at
+ * specific times
+ */
 type Trip struct {
 	route_id string
 	service_id string
@@ -22,6 +27,11 @@ type Trip struct {
 	bikes_allowed string
 }
 
+/*
+ * StopTime struct represents a stop time record
+ * A stop time is a specific instance of a vehicle stopping at a location during
+ * a trip
+ */
 type StopTime struct {
 	trip_id string
 	arrival_time string
@@ -34,14 +44,23 @@ type StopTime struct {
 	shape_distance_traveled string
 }
 
+/*
+ * Route struct represents a route record
+ * A route is an end-to-end path that a vehicle travels along
+ * A route may have multiple trips
+ */
 type Route struct {
 	route_id string
 	sign_code string
 	paired_service_id string
 }
 
+// Time layout for parsing time strings
 const timeLayout = "15:04:05"
 
+/*
+ * Reads out CSV formatted trips and returns a slice of Trip objects
+ */
 func getTripRecords() []Trip {
 	tripFileContents, err := os.ReadFile("gtfs/trips.txt")
 	
@@ -79,6 +98,9 @@ func getTripRecords() []Trip {
 	return trips
 }
 
+/*
+ * Reads out CSV formatted stop times and returns a slice of StopTime objects
+ */
 func getStopTimeRecords() []StopTime {
 	stopTimeFileContents, err := os.ReadFile("gtfs/stop_times.txt")
 	
@@ -115,6 +137,9 @@ func getStopTimeRecords() []StopTime {
 	return stopTimes
 }
 
+/*
+ * Returns a slice of all trips filtered by a given Route
+ */
 func getTripsByRoute(route Route, trips []Trip) []Trip {
 	var tripsByRoute []Trip
 	
@@ -127,6 +152,9 @@ func getTripsByRoute(route Route, trips []Trip) []Trip {
 	return tripsByRoute
 }
 
+/*
+ * Returns a slice of all stop times for given Trips
+ */
 func getStopTimesByTrips(trips []Trip, stopTimes []StopTime) []StopTime {
 	var stopTimesByTrip []StopTime
 	
@@ -141,6 +169,9 @@ func getStopTimesByTrips(trips []Trip, stopTimes []StopTime) []StopTime {
 	return stopTimesByTrip
 }
 
+/*
+ * Returns a slice of all stop times for a given stop ID
+ */
 func getStopTimesByStop(stop_id string, stopTimes []StopTime) []StopTime {
 	var stopTimesByStop []StopTime
 	
@@ -153,6 +184,12 @@ func getStopTimesByStop(stop_id string, stopTimes []StopTime) []StopTime {
 	return stopTimesByStop
 }
 
+/*
+ * Converts a time string to a time.Time object
+ *
+ * If the time exceeds 24 hours, it will be converted to the next day
+ * Trains do not start past midnight but may end past midnight
+ */
 func getTimeStringAsTime(timeString string) time.Time {
 	// time may exceed 24 hours
 	exceeds24 := strings.HasPrefix(timeString, "24:")
@@ -177,6 +214,9 @@ func getTimeStringAsTime(timeString string) time.Time {
 	return time
 }
 
+/*
+ * Returns the stop time closest to the current time
+ */
 func getNextStopTime(currentTime time.Time, stopTimes []StopTime) StopTime {
 	
 	upcomingTimestampsToStopTimes := make(map[time.Time]StopTime, 0)
@@ -207,6 +247,9 @@ func getNextStopTime(currentTime time.Time, stopTimes []StopTime) StopTime {
 	return upcomingTimestampsToStopTimes[nearestArrivalTime]
 }
 
+/*
+ * Returns N upcoming stop times from the current time
+ */
 func getUpcomingStopTimes(initialTime time.Time, stopTimes []StopTime, count int) []StopTime {
 	upcomingStopTimes := make([]StopTime, 0) // May not fill up to count
 	activeTime := initialTime
@@ -226,6 +269,10 @@ func getUpcomingStopTimes(initialTime time.Time, stopTimes []StopTime, count int
 	return upcomingStopTimes
 }
 
+/*
+ * Formats the upcoming stop times in a display readable format
+ * e.g. "5, 10, 15 MIN"
+ */
 func formatTimes(stopTimes []StopTime) string {
 	
 	now := time.Now()
@@ -242,8 +289,13 @@ func formatTimes(stopTimes []StopTime) string {
 	return text + " MIN"
 }
 
+/*
+ * Returns a slice of display rows for the transit display
+ */
 func Rows() []string {
 	desiredStopTimeCount := 2
+	
+	// Routes hardcoded for now along with the active service schedule
 	orangeSouth := Route{route_id: "4", sign_code: "BERRYESSA", paired_service_id: "2024_01_15-DX-MVS-Weekday-01"} // Richmond to Berryessa/North San Jose
 	redSouth := Route{route_id: "7", sign_code: "MILLBRAE", paired_service_id: "2024_01_15-DX-MVS-Weekday-01"} // Richmond to Daly City/Millbrae
 	northBerkeleyStopId := "NBRK" // North Berkeley
