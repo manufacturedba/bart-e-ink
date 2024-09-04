@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/bart-e-ink/internal/transit"
 )
@@ -18,12 +18,17 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	port := flag.String("port", "8080", "Listening port for the server")
+	val, ok := os.LookupEnv("PORT")
+	var port string
 	
-	flag.Parse()
-    
+	if !ok {
+		port = "8080"
+	} else {
+		port = val
+	}
+	
 	http.HandleFunc("/", handler)
-	log.Println("Server started on port " + *port)
+	log.Println("Server started on port " + port)
 	log.Println("Press Ctrl+C to stop the server")
-	log.Fatal(http.ListenAndServe(":" + *port, nil))
+	log.Fatal(http.ListenAndServe(":" + port, nil))
 }
