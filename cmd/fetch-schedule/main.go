@@ -112,19 +112,18 @@ func main() {
 			if err != nil {
 				fmt.Println("could not decompress file: ", err)
 			}
+						
+			fileName := path.Join(writeDirectory, file.Name)
+			outputFile, err := os.Create(fileName)
 			
 			defer archiveFile.Close()
+			defer outputFile.Close()
 			
-			fileName := path.Join(writeDirectory, file.Name)
-			bytes := make([]byte, file.UncompressedSize64)
-			
-			_, err = archiveFile.Read(bytes)
-			
-			if err != nil && err != io.EOF {
-				fmt.Println("could not scan decompressed file: ", err)
+			if err != nil {
+				fmt.Println("could not create schedule file: ", err)
 			}
 			
-			err = os.WriteFile(fileName, bytes, 0666)
+			_, err = io.Copy(outputFile, archiveFile)
 			
 			if err != nil {
 				fmt.Println("could not write schedule file: ", err)
@@ -132,5 +131,5 @@ func main() {
 		}()
 	}
 	
-	fmt.Println("schedule written to " + writeDirectory)
+	log.Println("Schedule written to " + writeDirectory)
 }
