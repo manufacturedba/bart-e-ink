@@ -23,15 +23,21 @@ import (
 const bartScheduleURL = "https://www.bart.gov/dev/schedules/google_transit.zip"
 const writeDirectory = "gtfs"
 
+// A schedule is a collection of Files that make up a BART schedule
+// The archive is the original zip file that contains the schedule
+// This struct is contextually used to hold an already opened file so 
+// it can be closed later.
 type schedule struct {
 	archive *os.File
 	file []*zip.File
 }
 
+// Proxy to the Close method of the zip file
 func (s *schedule) Close() error {
 	return s.archive.Close()
 }
 
+// Establish if the output directory already exists
 func isExisting() bool {
 	_, err := os.Stat(writeDirectory)
 	
@@ -42,6 +48,8 @@ func isExisting() bool {
 	return true
 }
 
+// Fetches the latest zip from the BART website and streams it to a temporary
+// file for latest use.
 func latestArchive() (*os.File, error) {	
 	response, err := http.Get(bartScheduleURL)
 	
@@ -66,7 +74,8 @@ func latestArchive() (*os.File, error) {
 	return tempFile, nil
 }
 
-
+// Returns a schedule struct from the latest BART schedule download for 
+// file processing
 func newSchedule() (*schedule, error) {
 	archive, err := latestArchive()
 
