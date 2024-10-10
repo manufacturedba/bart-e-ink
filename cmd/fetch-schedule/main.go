@@ -1,4 +1,3 @@
-// https://www.bart.gov/dev/schedules/google_transit.zip
 package main
 
 import (
@@ -11,7 +10,16 @@ import (
 	"path"
 )
 
-
+// TODO
+// - To incorporate this into a larger application, it'll need to avoid any
+// panics/exits and return original errors
+// - For both CLI and API, it needs to accept both the write directory and URL as
+// arguments, but what is already here can remain as defaults
+// - It should accept a force argument in cases where the data has gone stale
+// or was downloaded partially/corrupted
+// - Actually a concept of staleness would be good and incorporated with the
+// existing directory check. Maybe use the timestamp of any file since I don't
+// want to rely on knowing all files that should exist
 const bartScheduleURL = "https://www.bart.gov/dev/schedules/google_transit.zip"
 const writeDirectory = "gtfs"
 
